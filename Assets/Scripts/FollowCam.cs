@@ -1,26 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowCam : MonoBehaviour
 {
     public GameObject player;
-    private Vector3 initOffset;
-    public float cameraSmoothness = 0.3f;
+    public float translationSpeed = 2f;
+    
+    [Tooltip("Positional confines to clamp the camera's position to")]
+    public Vector3 minimumPos;
+    [Tooltip("Positional confines to clamp the camera's position to")]
+    public Vector3 maximumPos;
+    
+    private Vector3 _initOffset;
 
-    // Start is called before the first frame update
     void Awake()
     {
-        initOffset = transform.position;
+        _initOffset = transform.position - player.transform.position;
+
+        if (minimumPos.x > maximumPos.x)
+        {
+            (minimumPos.x, maximumPos.x) = (maximumPos.x, minimumPos.x);
+        }
+
+        if (minimumPos.z > maximumPos.z)
+        {
+            (minimumPos.z, maximumPos.z) = (maximumPos.z, minimumPos.z);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(player.transform.position - transform.position),
-            Time.deltaTime
+        Vector3 playerLocation = player.transform.position + _initOffset;
+
+        Vector3 newCamPosition = new Vector3(
+            Mathf.Clamp(
+                playerLocation.x,
+                minimumPos.x,
+                maximumPos.x
+            ),
+            _initOffset.y,
+            Mathf.Clamp(
+                playerLocation.z,
+                minimumPos.z,
+                maximumPos.z
+            )
+        );
+
+        transform.position = Vector3.Slerp(
+            transform.position,
+            newCamPosition,
+            Time.deltaTime * translationSpeed
         );
     }
 }
