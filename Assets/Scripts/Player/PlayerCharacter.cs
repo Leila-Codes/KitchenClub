@@ -1,17 +1,19 @@
+using System;
 using System.Collections;
+using Interaction;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
 {
     public int movementSpeed = 4;
-    public int turnSpeed = 20;
+    public int turnSpeed = 30;
     public GameObject interactionSprite;
     
     private Animator _animator;
     private Rigidbody _rigidbody;
     private float _rot;
     private Interactable _interactable;
-    private bool _interacting = false;
+    private IEnumerator _interacting;
 
     private static readonly int XInput = Animator.StringToHash("x_input");
     private static readonly int YInput = Animator.StringToHash("y_input");
@@ -40,11 +42,11 @@ public class PlayerCharacter : MonoBehaviour
         if (interactionSprite != null) 
             interactionSprite.SetActive(true);
         
-        if (_interacting)
+        if (_interacting != null)
         {
-            _interacting = false;
+            _interacting = null;
             _interactable.Cancel();
-            StopCoroutine(InteractAnimation(_interactable.interactionDuration));
+            StopCoroutine(PlayerInteract(_interactable.interactionDuration));
         }
         
         _interactable = null;
@@ -55,23 +57,49 @@ public class PlayerCharacter : MonoBehaviour
 
     void FixedUpdate()
     { 
-        HandlePlayerMovement();
+        if (_interacting == null)
+            HandlePlayerMovement();
+    }
 
-        if (Input.GetKey(KeyCode.E) 
-            && _interacting == false 
-            && _interactable != null)
+    private bool IsInteracting()
+    {
+        return _interacting != null;
+    }
+
+    private void Update()
+    {
+        if (_interactable != null)
         {
-            _interactable.Interact();
-            _interacting = true;
-            StartCoroutine(InteractAnimation(_interactable.interactionDuration));
+            if (IsInteracting())
+            {
+                // If I was interacting with something, that requires continuous press, and the key was released...
+                if (Input.GetKeyUp(KeyCode.E) && _interactable.requiresContinuousInteraction)
+                {
+                    StopCoroutine(_interacting);
+                    _animator.SetBool(Performing, false);
+                    _interacting = null;
+                    _interactable.Cancel();
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                // Else, am I pressing the key and is there something to interact with?
+                _animator.SetBool(Performing, true);
+                _interacting = PlayerInteract(_interactable.interactionDuration);
+                StartCoroutine(_interacting);
+            }
         }
     }
 
-    private IEnumerator InteractAnimation(float durationSecs)
+    private IEnumerator PlayerInteract(float durationSecs)
     {
         _animator.SetBool(Performing, true);
+        _interactable.Interact();
+        
         yield return new WaitForSeconds(durationSecs);
+        
         _animator.SetBool(Performing, false);
+        _interacting = null;
     }
 
     private void HandlePlayerMovement()
