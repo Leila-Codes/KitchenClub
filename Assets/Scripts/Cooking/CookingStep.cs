@@ -8,6 +8,7 @@ namespace Cooking
     {
         public Interactable target;
         public ActionType action;
+        public float cookingTime;
         [NonSerialized]
         private bool _complete;
 
