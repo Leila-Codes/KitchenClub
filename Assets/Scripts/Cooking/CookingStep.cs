@@ -1,5 +1,6 @@
 using System;
 using Interaction;
+using UnityEngine;
 
 namespace Cooking
 {
@@ -8,6 +9,8 @@ namespace Cooking
     {
         public Interactable target;
         public ActionType action;
+        public GameObject popup;
+        
         public float cookingTime;
         [NonSerialized]
         private bool _complete;

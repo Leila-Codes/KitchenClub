@@ -6,14 +6,12 @@ namespace Interaction
     public class FridgeFreezer : Interactable
     {
         private Animator _animator;
-        private static readonly int FridgeOpen = Animator.StringToHash("fridgeOpen");
+        private static readonly int FridgeOpen = Animator.StringToHash("opened");
         private bool _opened;
 
         void Awake()
         {
             _animator = GetComponent<Animator>();
-            
-
         }
 
         private void Start()

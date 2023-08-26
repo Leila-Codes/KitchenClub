@@ -5,13 +5,12 @@ namespace Cooking
 {
     public class Recipe : MonoBehaviour
     {
-        public GameObject tooltipPrefab;
-        public GameObject canvas;
+        public GameObject popupCanvas;
         public List<CookingStep> steps;
         private CookingStep _currentStep;
         private int _currentStepId;
 
-        private GameObject stepTooltip;
+        private GameObject _stepTooltip;
 
 
         private void RenderStep()
@@ -19,27 +18,17 @@ namespace Cooking
             if (_currentStep.target)
             {
                 // Create new Tooltip
-                stepTooltip = Instantiate(tooltipPrefab, canvas.transform);
-                Tooltip content = stepTooltip.GetComponent<Tooltip>();
+                _stepTooltip = Instantiate(_currentStep.popup, popupCanvas.transform);
+                
+                // Attach the popup to the parent/target object of this step.
+                UI.AttachTo content = _stepTooltip.GetComponent<UI.AttachTo>();
                 content.parent = _currentStep.target.gameObject.transform;
-
-                switch (_currentStep.action)
-                {
-                    case CookingStep.ActionType.Collect:
-                        content.SetIcon(Tooltip.Icon.Onion);
-                        break;
-                    case CookingStep.ActionType.Cook:
-                        content.SetIcon(Tooltip.Icon.Flame);
-                        break;
-                    case CookingStep.ActionType.Cut:
-                        content.SetIcon(Tooltip.Icon.Knife);
-                        break;
-                    case CookingStep.ActionType.Stir:
-                        content.SetIcon(Tooltip.Icon.Spoon);
-                        break;
-                }
                 
                 // configure listener for step completion
+                if (_currentStep.action == CookingStep.ActionType.Cook && _currentStep.cookingTime > 0f)
+                {
+                    _currentStep.target.interactionDuration = _currentStep.cookingTime;
+                }
                 _currentStep.target.InteractComplete += StepComplete;
             }
         }
@@ -47,7 +36,7 @@ namespace Cooking
         void StepComplete()
         {
             Debug.Log("Congratulations! You just completed a step in the Kitchen!");
-            Destroy(stepTooltip);
+            Destroy(_stepTooltip);
             _currentStep.target.InteractComplete -= StepComplete;
             
             _currentStep.SetCompleted(true);
