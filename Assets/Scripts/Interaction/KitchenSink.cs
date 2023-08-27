@@ -18,7 +18,7 @@ namespace Interaction
             InteractStart += OnInteractStarted;
         }
 
-        private void OnInteractStarted()
+        private void OnInteractStarted(Interactable interactable)
         {
             _filled = !_filled;
             _animator.SetBool(Filled, _filled);

@@ -22,11 +22,11 @@ public class CustomerQueue : MonoBehaviour
         customer.transform.position = waitingArea.transform.position;
 
         // Face in the queueing direction
-        customer.transform.rotation = Quaternion.Euler(0, -90, 0);
+        customer.transform.rotation = Quaternion.Euler(0, 90, 0);
         
         // Adjust customer's position based on # of customers in the queue.
         customer.transform.Translate(
-            (3f - _customers.Count) * customer.transform.right
+            (3f - _customers.Count) * -customer.transform.right
         );
     }
 

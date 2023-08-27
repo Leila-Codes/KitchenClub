@@ -8,7 +8,7 @@ namespace Interaction
             InteractStart += OnInteractStarted;
         }
 
-        private void OnInteractStarted()
+        private void OnInteractStarted(Interactable interactable)
         {
             // Does nothing - YET! :) 
         }

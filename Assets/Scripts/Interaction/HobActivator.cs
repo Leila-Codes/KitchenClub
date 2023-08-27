@@ -14,7 +14,7 @@ namespace Interaction
             InteractStart += OnInteractStarted;
         }
 
-        private void OnInteractStarted()
+        private void OnInteractStarted(Interactable interactable)
         {
             _active = !_active;
             flame.gameObject.SetActive(_active);

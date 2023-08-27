@@ -1,61 +1,66 @@
+using Cooking;
+using Interaction;
 using UnityEngine;
 
 namespace Dining
 {
-    public class Customer : MonoBehaviour
+
+    public delegate void MoodChanged(Customer.Mood currentMood);
+    
+    public class Customer : Interactable
     {
-        public enum State
+        // ReSharper disable once StringLiteralTypo
+        private static readonly string[] Names = {"Jeannette", "Marly", "Blossom", "Sabrina", "Rosalee", "Isaia", "Olga", "Nora", "Aurel", "Diana"};
+        
+        public enum Mood
         {
-            Idle,
-            Seated,
-            // Browsing,
-            Waiting,
-            Angry
+            Happy,
+            Indifferent,
+            Annoyed,
+            Sad
         }
 
+        [HideInInspector]
+        public Timer timer;
+
+        [HideInInspector]
+        public CustomerOrder order;
+
+        public event MoodChanged MoodChanged;
+        
         /** === PRIVATE MEMBER VARS === */
         private Animator _animator;
 
-        private State _state = State.Idle;
+        private string _name;
+
+        private Mood _mood = Mood.Indifferent;
+
         private bool _seated;
         /** === END PRIVATE MEMBERS === **/
         
         
         /** ===== ANIMATOR CONSTANTS ===== **/
         private static readonly int Seated = Animator.StringToHash("seated");
-        private static readonly int Browsing = Animator.StringToHash("browsing");
-        private static readonly int Waiting = Animator.StringToHash("waiting");
-        private static readonly int Impatient = Animator.StringToHash("impatient");
         /** === END ANIMATOR CONSTANTS === **/
         
         void Start()
         {
             _animator = GetComponent<Animator>();
+
+            _name = Names[Random.Range(0, Names.Length)];
         }
 
-        public void SetState(State newState)
+        public Mood GetMood()
         {
-            if (!_seated) return; // cannot change state whilst the player isn't sitting down
-            
-            _state = newState;
-            _animator.SetBool(Browsing, false);
-            _animator.SetBool(Waiting, false);
-            _animator.SetBool(Impatient, false);
-
-            switch (_state)
-            {
-                // case State.Browsing:
-                    // _animator.SetBool(Browsing, true);
-                    // break;
-                case State.Waiting:
-                    _animator.SetBool(Waiting, true);
-                    break;
-                case State.Angry:
-                    _animator.SetBool(Impatient, true);
-                    break;
-            }
+            return _mood;
         }
 
+        public void SetMood(Mood newMood)
+        {
+            _mood = newMood;
+            MoodChanged?.Invoke(newMood);
+        }
+        
         public void Stand()
         {
             _seated = false;

@@ -8,7 +8,6 @@ namespace UI
         public Vector2 screenOffset = new(0, 100f);
 
         private RectTransform _content;
-        private Camera _mainCamera;
         private Vector3 _initScale;
 
         // Start is called before the first frame update
@@ -16,7 +15,6 @@ namespace UI
         {
             _content = GetComponent<RectTransform>();
             _initScale = _content.localScale;
-            _mainCamera = Camera.main;
         }
 
         // Update is called once per frame
@@ -25,7 +23,7 @@ namespace UI
             if (parent != null)
             {
                 Vector3 target = parent.transform.position;
-                Vector3 screenPos = _mainCamera.WorldToScreenPoint(target);
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(target);
 
                 screenPos.x += screenOffset.x;
                 screenPos.y += screenOffset.y;

@@ -1170,6 +1170,7 @@ GameObject:
   - component: {fileID: 6911762812523900499}
   - component: {fileID: 6037457799702658227}
   - component: {fileID: 2332246784411610349}
+  - component: {fileID: 414206922997884494}
   m_Layer: 0
   m_Name: Customer_Green
   m_TagString: Untagged
@@ -1228,6 +1229,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1673d101334a3d345b72deb959616fbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionDuration: 2
+  interactionEnabled: 1
+  requiresContinuousInteraction: 1
+  timer: {fileID: 0}
+--- !u!136 &414206922997884494
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8702188510575158379}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &8915675039542129226
 GameObject:
   m_ObjectHideFlags: 0

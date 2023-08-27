@@ -16,7 +16,7 @@ namespace Interaction.Customers
             InteractComplete += OnInteractComplete;
         }
 
-        private void OnInteractComplete()
+        private void OnInteractComplete(Interactable interactable)
         {
             GameObject customer = _customerQueue.DequeueCustomer();
             if (customer == null) return;

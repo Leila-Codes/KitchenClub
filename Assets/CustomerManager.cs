@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using Dining;
 using UnityEngine;
 
 public class CustomerManager : MonoBehaviour
@@ -10,7 +11,10 @@ public class CustomerManager : MonoBehaviour
     /* ===== CUSTOMER AREAS ===== */
     [Header("Customer Common Areas")] [Description("In-game locations for customers to be bound to in the restaurant.")]
     public GameObject queuingArea;
-    public Dining.Table[] tables;
+
+    public Table[] tables;
+
+    private Hintable[] _tableHints;
     /* === END CUSTOMER AREAS === */
 
     private CustomerQueue _customerQueue;
@@ -19,6 +23,12 @@ public class CustomerManager : MonoBehaviour
     {
         _customerQueue = queuingArea.GetComponent<CustomerQueue>();
         configureSpawns();
+
+        _tableHints = new Hintable[tables.Length];
+        for (int i = 0; i < tables.Length; i++)
+        {
+            _tableHints[i] = tables[i].GetComponentInChildren<Hintable>();
+        }
     }
 
     private void configureSpawns()
@@ -34,16 +44,34 @@ public class CustomerManager : MonoBehaviour
         }
     }
 
-    public Dining.Chair nextAvailableSeat()
+    public Chair nextAvailableSeat()
     {
-        foreach (Dining.Table table in tables)
+        foreach (Table table in tables)
         {
-            Dining.Chair availability = table.NextAvailableSeat();
+            Chair availability = table.NextAvailableSeat();
 
             if (availability != null) return availability;
         }
 
         return null;
+    }
+
+    public void HintTable(int tableIndex)
+    {
+        // ReSharper disable once ExpressionIsAlwaysNull
+        if (tableIndex >= 0 && tableIndex < _tableHints!.Length)
+        {
+            _tableHints[tableIndex].ShowHint();
+        }
+    }
+    
+    public void UnhintTable(int tableIndex)
+    {
+        // ReSharper disable once ExpressionIsAlwaysNull
+        if (tableIndex >= 0 && tableIndex < _tableHints!.Length)
+        {
+            _tableHints[tableIndex].HideHint();
+        }
     }
 
 

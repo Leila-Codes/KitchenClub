@@ -20,13 +20,13 @@ namespace Interaction
             InteractCancel += OnInteractCancel;
         }
 
-        private void OnInteractStart()
+        private void OnInteractStart(Interactable interactable)
         {
             _opened = !_opened;
             _animator.SetBool(FridgeOpen, _opened);
         }
 
-        private void OnInteractCancel()
+        private void OnInteractCancel(Interactable interactable)
         {
             _opened = false;
             _animator.SetBool(FridgeOpen, _opened);
