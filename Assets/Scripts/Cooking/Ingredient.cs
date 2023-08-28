@@ -1,6 +1,7 @@
 using System;
 using Interaction;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Cooking
 {
@@ -10,22 +11,32 @@ namespace Cooking
         public enum Type
         {
             Banana,
-            Broccoli,
+            Apple,
+            Grape1,
+            Grape2,
+            Pineapple,
+            Kiwi,
+            Cherry,
+            Strawberry,
             Carrot,
-            Chilli,
-            Fish,
-            Poultry,
-            Meat,
-            Mushroom,
+            Tomato,
+            Aubergine,
+            Potato,
+            Broccoli,
             Onion,
-            Tomato
+            Chilli,
+            Mushroom,
+            Meat,
+            Poultry,
+            Fish,
+            Lobster
         }
 
         public Type type;
         public bool requiresPreparation = true;
         public Interactable location;
-        
-        [NonSerialized]
-        public bool isPrepared;
+
+        [NonSerialized] public bool IsCollected;
+        [NonSerialized] public bool IsPrepared;
     }
 }

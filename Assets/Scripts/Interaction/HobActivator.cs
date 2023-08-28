@@ -2,10 +2,8 @@ using UnityEngine;
 
 namespace Interaction
 {
-    public class HobActivator : Interactable
+    public class HobActivator : CookingAppliance
     {
-        public GameObject flame;
-        public GameObject steam;
 
         private bool _active;
 
@@ -17,7 +15,6 @@ namespace Interaction
         private void OnInteractStarted(Interactable interactable)
         {
             _active = !_active;
-            flame.gameObject.SetActive(_active);
         }
     }
 }

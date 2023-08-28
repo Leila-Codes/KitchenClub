@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Cooking;
 using Interaction;
-using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
@@ -10,7 +10,9 @@ public class PlayerCharacter : MonoBehaviour
     public int movementSpeed = 4;
     public int turnSpeed = 30;
     public GameObject interactionSprite;
-    [CanBeNull] public Ingredient carrying;
+    
+    [NonSerialized]
+    public Ingredient carrying = null;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
@@ -44,7 +46,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private void OnCollisionExit()
     {
-        if (_interactable && _interactable.interactionEnabled) return;
+        if (_interactable && !_interactable.interactionEnabled) return;
 
         if (interactionSprite != null) 
             interactionSprite.SetActive(true);

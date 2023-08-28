@@ -23,8 +23,6 @@ namespace Dining
             customer.transform.position = transform.position;
             customer.transform.rotation = Quaternion.LookRotation(-transform.up);
 
-            (customer.GetComponent<Customer>()).Sit();
-
             StartCoroutine(AnimateSeat());
         }
 

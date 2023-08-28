@@ -1173,7 +1173,7 @@ GameObject:
   - component: {fileID: 7449041735258417479}
   m_Layer: 0
   m_Name: Customer_Yellow
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1232,7 +1232,14 @@ MonoBehaviour:
   interactionDuration: 2
   interactionEnabled: 1
   requiresContinuousInteraction: 1
-  timer: {fileID: 0}
+  impatience: {fileID: 0}
+  order:
+    target: {fileID: 0}
+    ingredients: []
+    name: 
+    customer: {fileID: 0}
+    cookingTime: 0
+  firstName: 
 --- !u!136 &7449041735258417479
 CapsuleCollider:
   m_ObjectHideFlags: 0

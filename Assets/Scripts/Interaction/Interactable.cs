@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Timer = Cooking.Timer;
 
 namespace Interaction
 {
@@ -10,21 +10,20 @@ namespace Interaction
     
     public class Interactable : MonoBehaviour
     {
+        [Header("Hint light for this interactable")]
+        public Hintable hintable;
+
         public float interactionDuration = 1f;
-        [FormerlySerializedAs("inteactionEnabled")] public bool interactionEnabled = true;
+        public bool interactionEnabled = true;
         public bool requiresContinuousInteraction = false;
         private bool _inProgress;
         private IEnumerator _enumerator;
-        private Hintable _hintable;
 
         public event InteractionHandler InteractStart;
         public event InteractionHandler InteractCancel;
         public event InteractionHandler InteractComplete;
 
-        private void Start()
-        {
-            _hintable = GetComponentInChildren<Hintable>();
-        }
+       
 
         public void Interact()
         {
@@ -66,17 +65,21 @@ namespace Interaction
 
         public void ShowHint()
         {
-            if (_hintable)
+            if (!hintable)
             {
-                _hintable.ShowHint();
+                Debug.Log("No hintable is available for " + name);
+                return;
             }
+
+            Debug.Log("Hint now showing for " + name);
+            hintable.ShowHint();
         }
 
         public void HideHint()
         {
-            if (_hintable)
+            if (hintable)
             {
-                _hintable.HideHint();
+                hintable.HideHint();
             }
         }
     }

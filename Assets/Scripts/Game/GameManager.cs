@@ -35,6 +35,8 @@ namespace Game
             _cupboardHint = cupboard.GetComponentInChildren<Hintable>();
             _ovenHint = oven.GetComponentInChildren<Hintable>();
             _hobHint = hob.GetComponentInChildren<Hintable>();
+            
+            ScoreUpdated?.Invoke(_playerScore);
         }
 
         // Update is called once per frame

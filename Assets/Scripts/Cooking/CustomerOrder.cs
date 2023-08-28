@@ -25,8 +25,8 @@ namespace Cooking
         
         public int cookingTime;
         
-        [NonSerialized]
-        private bool _complete;
+        [NonSerialized] private bool _complete; 
+        [NonSerialized] public bool IsCooking; 
 
         public void SetCompleted(bool complete)
         {
