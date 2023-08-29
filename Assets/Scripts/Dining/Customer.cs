@@ -29,6 +29,12 @@ namespace Dining
             Annoyed
         }
 
+        public enum Action
+        {
+            Greet,
+            Wait
+        }
+
         [HideInInspector] public Timer impatience;
 
         [HideInInspector] public CustomerOrder order;

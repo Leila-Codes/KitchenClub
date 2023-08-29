@@ -11,7 +11,7 @@ namespace UI
         private Vector3 _initScale;
 
         // Start is called before the first frame update
-        void Start()
+        protected void Start()
         {
             _content = GetComponent<RectTransform>();
             _initScale = _content.localScale;

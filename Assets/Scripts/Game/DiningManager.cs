@@ -7,9 +7,11 @@ using UnityEngine;
 
 namespace Game
 {
+    public delegate void CustomerEvent(Customer customer);
+
     public class DiningManager : MonoBehaviour
     {
-        private const int CustomerWaitPeriod = 30;
+        private const int CustomerWaitPeriod = 10;
         private const int CustomerFoodWaitPeriod = 120; // 2 Minutes
 
         public Menu menu;
@@ -27,6 +29,13 @@ namespace Game
         [Tooltip("Dining room tables available for seating.")]
         public Table[] tables;
         /* === END CUSTOMER AREAS === */
+
+        /** ==== CUSTOMER EVENTS ===== */
+        public event CustomerEvent CustomerSpawned;
+        public event CustomerEvent CustomerLeft;
+        
+        /* === END CUSTOMER EVENTS === */
+        
 
         private readonly List<Customer> _customers = new();
         
@@ -58,7 +67,7 @@ namespace Game
         void CustomerArrives(Customer customer)
         {
             Debug.Log("A customer by the name '" + customer.firstName + "' has just arrived.");
-            
+
             // Add the customer to our list of customers.
             _customers.Add(customer);
 
@@ -71,6 +80,9 @@ namespace Game
             // Configure a patience timer for waiting at the entrance.
             customer.impatience.SetEndTime(CustomerWaitPeriod);
             customer.impatience.StartTimer();
+            
+            // Trigger event for customer spawn.
+            CustomerSpawned?.Invoke(customer);
         }
 
         // When the player successfully greets the customer at the door.
@@ -205,6 +217,9 @@ namespace Game
         {
             customer.Stand();
             yield return new WaitForSeconds(1f);
+            
+            // Trigger customer leave event for side-effects
+            CustomerLeft?.Invoke(customer);
             
             // Remove the customer from play.
             Destroy(customer.gameObject);

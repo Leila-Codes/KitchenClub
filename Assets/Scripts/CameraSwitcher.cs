@@ -6,13 +6,13 @@ public class CameraSwitcher : MonoBehaviour
     public Camera source;
     public Camera target;
 
-    private AudioListener _sourceListener;
-    private AudioListener _targetListener;
+    // private AudioListener _sourceListener;
+    // private AudioListener _targetListener;
 
     private void Start()
     {
-        _sourceListener = source.transform.GetComponent<AudioListener>();
-        _targetListener = target.transform.GetComponent<AudioListener>();
+        // _sourceListener = source.transform.GetComponent<AudioListener>();
+        // _targetListener = target.transform.GetComponent<AudioListener>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,12 +21,12 @@ public class CameraSwitcher : MonoBehaviour
         {
             // Disable the source (current)
             source.enabled = false;
-            _sourceListener.enabled = false;
+            // _sourceListener.enabled = false;
             source.tag = "Untagged";
             
             // Enable the target (next)
             target.enabled = true;
-            _targetListener.enabled = true;
+            // _targetListener.enabled = true;
             target.tag = "MainCamera";
         }
     }

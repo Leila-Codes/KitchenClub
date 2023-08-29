@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using Cooking;
 using Interaction;
+using JetBrains.Annotations;
 using UI;
 using UnityEngine;
 
 namespace Game
 {
     public delegate void CustomerOrderEvent(CustomerOrder order);
+
+    public delegate void OrderStepEvent(Ingredient.Type ingredient, CookingStep.Action action, [CanBeNull] Interactable target);
     
     public class KitchenManager : MonoBehaviour
     {
@@ -14,6 +17,7 @@ namespace Game
         public Interactable choppingBoard;
         public event CustomerOrderEvent OrderStarted;
         public event CustomerOrderEvent OrderUpdated;
+        public event OrderStepEvent CurrentStepUpdated;
         public event CustomerOrderEvent OrderCompleted;
         
 
@@ -54,6 +58,8 @@ namespace Game
 
             Debug.Log("The player needs to collect " + _currentIngredient.type + " from " +
                       _currentIngredient.location.name);
+            
+            CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Collect, _currentIngredient.location);
 
             _currentIngredient.location.InteractComplete += ItemCollected;
             _currentIngredient.location.ShowHint();
@@ -75,7 +81,8 @@ namespace Game
                 _currentIngredient.location.InteractComplete -= ItemCollected;
                 _currentIngredient.location.HideHint();
 
-
+                CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Prepare, choppingBoard);
+                
                 // Assign the ingredient to the player's "inventory"
                 player.carrying = _currentIngredient;
 
@@ -122,6 +129,8 @@ namespace Game
 
             // Setup handler for when player "places" the item on the correct cookware location.
             _activeOrder.target.InteractComplete += ItemPlaced;
+            
+            CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Place, _activeOrder.target);
 
             OrderUpdated?.Invoke(_activeOrder);
         }
@@ -152,6 +161,8 @@ namespace Game
                 _cookingTimer = ((CookingAppliance)_activeOrder.target).Timer();
                 _cookingTimer.SetEndTime(_activeOrder.cookingTime);
                 _cookingTimer.StartTimer();
+                
+                CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Cook, _activeOrder.target);
 
                 Debug.Log("All ingredients are now ready in " + _activeOrder.target.name + "! Let the cook commence!");
 
@@ -174,6 +185,8 @@ namespace Game
             _activeOrder.target.ShowHint();
 
             OrderUpdated?.Invoke(_activeOrder);
+            
+            CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Serve, _activeOrder.target);
             
             // TODO: Handle overcooked/burnt food.
         }
