@@ -1,4 +1,5 @@
 using Game;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ namespace UI
         public GameConfig gameConfig;
         public GameManager gameManager;
         public Image filler;
+        public TMP_Text readout;
 
         private float _newScale = 0;
     
@@ -31,6 +33,7 @@ namespace UI
         private void OnScoreChanged(float newScore)
         {
             _newScale = newScore / gameConfig.maxScore;
+            readout.text = Mathf.RoundToInt(_newScale * 100) + "%";
         }
     }
 }

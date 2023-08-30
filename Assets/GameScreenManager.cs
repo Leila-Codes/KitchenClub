@@ -45,5 +45,6 @@ public class GameScreenManager : MonoBehaviour
     public void MainMenu()
     {
         // TODO: Go to Main Menu.
+        SceneManager.LoadScene("MainMenu");
     }
 }
