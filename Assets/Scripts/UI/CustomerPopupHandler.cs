@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Dining;
 using Game;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -16,7 +17,7 @@ namespace UI
         public DiningManager diningManager;
         public IconSet iconSet;
 
-        private Dictionary<Customer, Popup> _customerMoods = new();
+        private readonly Dictionary<Customer, Image> _customerMoods = new();
         private Popup _popup;
 
         private void Start()
@@ -25,24 +26,15 @@ namespace UI
             diningManager.CustomerLeft += OnCustomerLeave;
         }
 
-        // void ClearPopups()
-        // {
-            // if (_popup != null)
-            // {
-                // DestroyImmediate(_popup.gameObject);
-                // _popup = null;
-            // }
-        // }
-
         void OnCustomerEnter(Customer customer)
         {
             GameObject popupObj = Instantiate(popupTemplate, popupContainer);
-            Popup popup = popupObj.GetComponent<Popup>();
+            Image popup = popupObj.transform.GetChild(0).GetComponent<Image>();
             AttachTo attachment = popupObj.AddComponent<AttachTo>();
             attachment.parent = customer.transform;
             attachment.screenOffset = CustomerMoodOffset;
-
-            popup.icon = iconSet.GetMoodSprite(customer.GetMood());
+                
+            popup.sprite = iconSet.GetMoodSprite(customer.GetMood());
 
             customer.MoodChanged += newMood => OnCustomerMoodChange(customer, newMood);
             
@@ -54,6 +46,7 @@ namespace UI
             if (_customerMoods.TryGetValue(customer, out var moodPopup))
             {
                 DestroyImmediate(moodPopup.gameObject);
+                _customerMoods.Remove(customer);
             }
         }
 
@@ -61,7 +54,7 @@ namespace UI
         {
             if (_customerMoods.TryGetValue(customer, out var moodPopup))
             {
-                moodPopup.iconOut.sprite = iconSet.GetMoodSprite(newMood);
+                moodPopup.sprite = iconSet.GetMoodSprite(newMood);
             }
         }
         

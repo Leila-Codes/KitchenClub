@@ -45,6 +45,8 @@ namespace Game
         private KitchenManager _kitchen;
         /* ==== END OF MANAGERS ==== */
 
+        private int _customersHaveLeft;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -176,6 +178,9 @@ namespace Game
         {
             Customer customer = (Customer)interactable;
             
+            // Remove listener.
+            customer.InteractComplete -= CustomerOrderDelivered;
+            
             Debug.Log("Congrats! You just served a delicious " + customer.order.name + " to the customer.");
             
             // TODO: spawn plate/food in front of player at the table.
@@ -185,6 +190,20 @@ namespace Game
             
             // Reset customer's mood
             customer.SetMood(Customer.Mood.Happy);
+            
+            // Allow the customer time to finish eating their food, then have the player ask them to leave.
+            StartCoroutine(CustomerEating(customer));
+        }
+
+        IEnumerator CustomerEating(Customer customer)
+        {
+            // Wait for the customer to finish eating.
+            yield return new WaitForSeconds(Random.Range(5, 20));
+            
+            Debug.Log("Customer " + customer.firstName + " has finished eating. Please wave them off.");
+
+            // Setup events for player to dismiss the customer.
+            customer.InteractComplete += _ => OnCustomerLeft(customer);
         }
 
         IEnumerator SpawnCustomer(int spawnDelaySecs)
@@ -203,11 +222,12 @@ namespace Game
             CustomerArrives(newCustomer);
         }
 
+        // Customer leaves the restaurant. Currently no way to tell if for good or bad reason.
         void OnCustomerLeft(Customer customer)
         {
             // TODO: play sound.
             
-            Debug.Log("Customer " + customer.firstName + " is now so fed up, they have left the restaurant.");
+            // Debug.Log("Customer " + customer.firstName + " is now so fed up, they have left the restaurant.");
             
             // Animate the customer leaving the restaurant
             StartCoroutine(AnimateCustomerLeave(customer));
@@ -224,6 +244,9 @@ namespace Game
             // Remove the customer from play.
             Destroy(customer.gameObject);
             _customers.Remove(customer);
+            
+            // Increment number of customers who have left.
+            _customersHaveLeft++;
         }
     }
 }

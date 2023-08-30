@@ -1,54 +1,63 @@
+using Dining;
 using UnityEngine;
 
 namespace Game
 {
     public delegate void ScoreChanged(float newScore);
+
+    public delegate void GameEnded();
     
     public class GameManager : MonoBehaviour
     {
-
-        private float _playerScore;
-
+        /** ====== EVENTS ====== */
         public event ScoreChanged ScoreUpdated;
+        public event GameEnded GameWin;
+        public event GameEnded GameLost;
+        
+        /** === END OF EVENTS === */
 
+
+        public DiningManager diningManager;
+        
+        private float _playerScore;
         private int _customersServed;
         private int _mealsServed;
         private int _ordersTaken;
+        private int _customersLeft;
         private float _score;
 
-        [Header("Cooking Subsystem")]
-        public GameObject fridge;
-
-        private Hintable _fridgeHint;
-        public GameObject cupboard;
-        private Hintable _cupboardHint;
-        public GameObject oven;
-        private Hintable _ovenHint;
-        public GameObject hob;
-        private Hintable _hobHint;
-    
-    
         // Start is called before the first frame update
         void Start()
         {
-            _fridgeHint = fridge.GetComponentInChildren<Hintable>();
-            _cupboardHint = cupboard.GetComponentInChildren<Hintable>();
-            _ovenHint = oven.GetComponentInChildren<Hintable>();
-            _hobHint = hob.GetComponentInChildren<Hintable>();
-            
             ScoreUpdated?.Invoke(_playerScore);
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
+            diningManager.CustomerLeft += OnCustomerLeave;
+        }
         
-        }
-
         public void IncrementScore(float amount)
         {
             _playerScore += amount;
             ScoreUpdated?.Invoke(_playerScore);
+        }
+
+        void OnCustomerLeave(Customer customer)
+        {
+            _customersLeft++;
+            
+            // Check Win/Loss Condition
+            if (_customersLeft >= diningManager.customersToArrive)
+            {
+                if (_playerScore >= 0.5)
+                {
+                    // Trigger Win
+                    GameWin?.Invoke();
+                }
+                else
+                {
+                    // Trigger loss
+                    GameLost?.Invoke();
+                }
+            }
         }
     }
 }

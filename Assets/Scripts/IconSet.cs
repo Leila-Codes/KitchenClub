@@ -36,22 +36,26 @@ public class IconSet : MonoBehaviour
 
     public Sprite GetIngredientIcon(Ingredient.Type ingredientType)
     {
-        return _foodSprites[ingredientType.ToString().ToLower()];
+        string assetName = ingredientType.ToString().ToLower();
+        return _foodSprites.TryGetValue(assetName, out var sprite) ? sprite : null;
     }
 
     public Sprite GetActionIcon(CookingStep.Action actionType)
     {
-        return _actionSprites[actionType.ToString().ToLower()];
+        string actionName = actionType.ToString().ToLower();
+        return _actionSprites.TryGetValue(actionName, out var sprite) ? sprite : null;
     }
 
     public Sprite GetCustomerActionIcon(Customer.Action action)
     {
-        return _moodSprites[action.ToString().ToLower()];
+        String assetName = action.ToString().ToLower();
+        return _moodSprites.TryGetValue(assetName, out var sprite) ? sprite : null;
     }
     
     public Sprite GetMoodSprite(Customer.Mood mood)
     {
-        return _moodSprites[mood.ToString().ToLower()];
+        String assetName = mood.ToString().ToLower();
+        return _moodSprites.TryGetValue(assetName, out var sprite) ? sprite : null;
     }
     
 }
