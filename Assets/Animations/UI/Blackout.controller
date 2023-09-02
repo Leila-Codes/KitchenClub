@@ -6,7 +6,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GameOver
+  m_Name: Blackout
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
@@ -32,8 +32,8 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 6665171727818248152}
-    m_Position: {x: 140, y: 240, z: 0}
+    m_State: {fileID: 2599375180607070512}
+    m_Position: {x: 366.6667, y: 321.89188, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -43,15 +43,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 6665171727818248152}
---- !u!1102 &6665171727818248152
+  m_DefaultState: {fileID: 2599375180607070512}
+--- !u!1102 &2599375180607070512
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FadeIn
+  m_Name: FadeInFull
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -64,7 +64,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e8819ec4ba82d4046a256a4fb0188ee6, type: 2}
+  m_Motion: {fileID: 7400000, guid: 2b8782d5993c68b4d990604573cfccf8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

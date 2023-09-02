@@ -1,8 +1,10 @@
 using System;
 using Cooking;
+using Dining;
 using Game;
 using Interaction;
 using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,6 +63,9 @@ namespace UI
             {
                 case CookingStep.Action.Collect:
                     _popup.sprite = iconSet.GetIngredientIcon(ingredient);
+                    break;
+                case CookingStep.Action.Place:
+                    _popup.sprite = iconSet.GetCustomerActionIcon(Customer.Action.Wait);
                     break;
                 default:
                     _popup.sprite = iconSet.GetActionIcon(action);

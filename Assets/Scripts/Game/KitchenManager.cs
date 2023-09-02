@@ -81,7 +81,6 @@ namespace Game
                 _currentIngredient.location.InteractComplete -= ItemCollected;
                 _currentIngredient.location.HideHint();
 
-                CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Prepare, choppingBoard);
                 
                 // Assign the ingredient to the player's "inventory"
                 player.carrying = _currentIngredient;
@@ -95,6 +94,9 @@ namespace Game
                     choppingBoard.InteractComplete += ItemPrepared;
 
                     choppingBoard.ShowHint();
+                    
+                    // Show tooltip for preparing the food.
+                    CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Prepare, choppingBoard);
                 }
                 else
                 {
@@ -102,6 +104,9 @@ namespace Game
                     _activeOrder.target.InteractComplete += ItemPlaced;
 
                     _activeOrder.target.ShowHint();
+                    
+                    // Show tooltip for cooking!
+                    CurrentStepUpdated?.Invoke(_currentIngredient.type, CookingStep.Action.Place, _activeOrder.target);
                 }
                 
                 OrderUpdated?.Invoke(_activeOrder);
